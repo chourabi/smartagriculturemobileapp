@@ -1,0 +1,625 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Détails du projet</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ 
+  
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4" *ngIf="project != null">
+          <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Géneral</h6>
+          </div>
+          <div class="card-body">
+              <h3>{{ project.title }}</h3>
+              <p>{{ project.description }}</p>
+              <hr>
+  
+              <div class="row">
+                  <div class="col-sm-4">
+                      <label for="">Date de lancement</label>
+                      <input class="form-control" type="date" value="{{project.startDate}}" disabled>
+                  </div>
+                  <div class="col-sm-4">
+                      <label for="">Type</label>
+                      <input class="form-control" type="text" value="{{project.type}}" disabled>
+                  </div>
+                  <div class="col-sm-4">
+                      <label for="">Nom sujet</label>
+                      <input class="form-control" type="text" value="{{project.target}}" disabled>
+                  </div>
+  
+  
+              </div>
+  
+  
+  
+          </div>
+  
+      </div>
+  
+  
+      <!-- employees -->
+      <div class="card shadow mb-4">
+          <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Engins affecté</h6>
+          </div>
+          <div class="card-body">
+              <form [formGroup]="affectEquipmentForm" (ngSubmit)="addNewEquipment()">
+                  <div class="row form">
+                      <div class=" col-sm-6">
+                          <div class="form-group">
+                              <label for="">Engin</label>
+                              <select class="form-control" formControlName="equipment_id">
+                                  <option value="">Choisissez un engin</option>
+                                  <option value="{{e.id}}" *ngFor="let e of equipments;">{{e.equipment.title}} </option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class=" col-sm-6">
+                          <button type="submit" class="btn btn-secondary  btn-block" style="margin-top: 2rem!important;"
+                              [disabled]="! affectEquipmentForm.valid ">Ajouter</button>
+                      </div>
+                  </div>
+  
+              </form>
+  
+  
+              <div *ngIf="project != null">
+                  <div class="list-group" *ngIf="project.equipments != null">
+                      <a class="list-group-item list-group-item-action " *ngFor="let e of project.equipments">
+                          <div class="d-flex w-100 justify-content-between">
+                              <h5 class="mb-1">{{e.equipment.title}}</h5>
+                              <button class="btn btn-danger" (click)="deleteEquipment(e.id)">
+                                  supprmier
+                              </button>
+                          </div> 
+                      </a>
+  
+                  </div>
+              </div>
+  
+  
+  
+          </div>
+      </div>
+  
+  
+      <!-- employees -->
+      <div class="card shadow mb-4">
+          <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Employés concernés</h6>
+          </div>
+          <div class="card-body">
+              <form [formGroup]="affectEmployeeForm" (ngSubmit)="addNewEmployee()">
+                  <div class="row form">
+                      <div class=" col-sm-6">
+                          <div class="form-group">
+                              <label for="">Employé</label>
+                              <select class="form-control" formControlName="employee_id">
+                                  <option value="">Choisissez un employé</option>
+                                  <option value="{{e.id}}" *ngFor="let e of employees;">{{e.employee.fullname}} /
+                                      {{e.employee.phone}} </option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class=" col-sm-6">
+                          <button type="submit" class="btn btn-secondary  btn-block" style="margin-top: 2rem!important;"
+                              [disabled]="! affectEmployeeForm.valid ">Ajouter</button>
+                      </div>
+                  </div>
+  
+              </form>
+  
+  
+              <div *ngIf="project != null">
+                  <div class="list-group" *ngIf="project.employees != null">
+                      <a class="list-group-item list-group-item-action " *ngFor="let e of project.employees">
+                          <div class="d-flex w-100 justify-content-between">
+                              <h5 class="mb-1">{{e.employee.fullname}}</h5>
+                              <button class="btn btn-danger" (click)="deleteEmployee(e.id)">
+                                  supprmier
+                              </button>
+                          </div>
+                          <p class="mb-1">{{e.employee.phone}}</p>
+                          <small>{{e.employee.email}}</small>
+                      </a>
+  
+                  </div>
+              </div>
+  
+  
+  
+          </div>
+      </div>
+  
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Liste des transactions</h6>
+              </div>
+              <div class="card-body">
+                  <div class="table-responsive">
+                      <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                          
+                      <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th> 
+                              <th scope="col">Type</th> 
+                              <th scope="col">Operation</th> 
+                              <th scope="col">Projet</th> 
+                              <th scope="col">Montant</th>
+                              <th scope="col">description</th>
+                               
+                               
+                            </tr>
+                          </thead>
+                          <tbody> 
+      
+                              <tr *ngFor="let e of transactions;let j=index;">
+                                  <td>{{ j+1 }}</td>
+                                  <td>
+                                      <span class="badge" [ngClass]=" e.title =='revenu'  ? 'badge-success' : 'badge-danger' " >{{ e.title }}</span>
+                                  </td>
+                                  <td>{{ e.operation_name }}</td>
+                                  <td>{{ e.project_name }}</td>
+                                  <td>{{ e.amount }}</td>
+                                  <td>{{ e.description }}</td>
+                                  
+                                  
+                                  
+                              </tr>
+                            
+                            
+                          </tbody>
+                        </table>
+                  </div>
+              </div>
+          </div>
+      
+      </div>
+      
+  
+  
+      <!-- interventions -->
+      <div class="card shadow mb-4">
+          <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Intervention</h6>
+          </div>
+          <div class="card-body">
+              <form [formGroup]="newIntervention">
+                  <div class="row form">
+                      <div class=" col-sm-12">
+                          <div class="form-group">
+                              <label for="">Ajouter une nouvelle opération</label>
+                              <select class="form-control" formControlName="operation">
+                                  <option value="">Choisissez une operation</option>
+                                  <option value="Irragation">Irragation</option>
+                                  <option value="Maintenance">Maintenance</option>
+                                  <option value="Récolte">Récolte</option>
+                                  <option value="Stock">Stock</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+  
+              </form>
+  
+              <hr>
+  
+              <h3>List des interventions</h3>
+  
+  
+              <div *ngIf="newIntervention.value.operation =='Irragation' ">
+                  <form [formGroup]="IrrigationForm" (ngSubmit)="addNewIntervention()">
+                      <div class="row form">
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <label for="">Type</label>
+                                  <select class="form-control" formControlName="type">
+                                      <option value="">Choisissez une option</option>
+                                      <option value="Manuelle">Manuelle</option>
+                                      <option value="Automatique">Automatique</option>
+  
+                                  </select>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Date d'ajout</label>
+                                      <input type="date" class="form-control" formControlName="date">
+                                  </div>
+                              </div>
+                          </div>
+  
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Apport en eau</label>
+                                      <input type="text" class="form-control" formControlName="apport_en_eau">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">capacité( L ) </label>
+                                      <input type="number" class="form-control" formControlName="capacity">
+                                  </div>
+                              </div>
+                          </div>
+  
+                          <div class=" col-sm-12">
+                              <div class="form-group">
+                                  <label for="">Pompage</label>
+                                  <select class="form-control" formControlName="pompage">
+                                      <option value="">Choisissez une option</option>
+                                      <option value="Vanne">Vanne</option>
+                                      <option value="Moteur">Moteur</option>
+  
+                                  </select>
+                              </div>
+                          </div>
+  
+                          <div class=" col-sm-12">
+                              <button type="submit" class="btn btn-secondary  btn-block"
+                                  style="margin-bottom: 2rem!important;"
+                                  [disabled]="! IrrigationForm.valid ">Ajouter</button>
+                          </div>
+                      </div>
+  
+                  </form>
+              </div>
+  
+              <div *ngIf="newIntervention.value.operation =='Maintenance' ">
+                  <form [formGroup]="maintenanceForm" (ngSubmit)="addNewIntervention()">
+                      <div class="row form">
+  
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Date d'ajout</label>
+                                      <input type="date" class="form-control" formControlName="date">
+                                  </div>
+                              </div>
+                          </div>
+  
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Nom de traitement chimique</label>
+                                      <input type="text" class="form-control" formControlName="nom_traitement_chimique">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Climat</label>
+                                      <input type="text" class="form-control" formControlName="climat">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Dose obligatoire </label>
+                                      <input type="text" class="form-control" formControlName="dose_obligatoire">
+                                  </div>
+                              </div>
+                          </div>
+  
+  
+  
+                          <div class=" col-sm-12">
+                              <button type="submit" class="btn btn-secondary  btn-block"
+                                  style="margin-bottom: 2rem!important;"
+                                  [disabled]="! maintenanceForm.valid ">Ajouter</button>
+                          </div>
+                      </div>
+  
+                  </form>
+              </div>
+  
+              <div *ngIf="newIntervention.value.operation =='Récolte' ">
+                  <form [formGroup]="recoltForm" (ngSubmit)="addNewIntervention()">
+                      <div class="row form">
+  
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Date d'ajout</label>
+                                      <input type="date" class="form-control" formControlName="date">
+                                  </div>
+                              </div>
+                          </div>
+  
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Pic de puissance</label>
+                                      <input type="text" class="form-control" formControlName="pic_de_puissance">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Nombre de caisse</label>
+                                      <input type="text" class="form-control" formControlName="nombre_de_caisse">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Poids moyen pour caisse </label>
+                                      <input type="text" class="form-control" formControlName="poids">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Numéro de véhicule </label>
+                                      <input type="text" class="form-control" formControlName="numero_de_vehicule">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Agréage des fruits </label>
+                                      <input type="text" class="form-control" formControlName="agreage_de_fruits">
+                                  </div>
+                              </div>
+                          </div>
+  
+  
+  
+  
+                          <div class=" col-sm-12">
+                              <button type="submit" class="btn btn-secondary  btn-block"
+                                  style="margin-bottom: 2rem!important;" [disabled]="! recoltForm.valid ">Ajouter</button>
+                          </div>
+                      </div>
+  
+                  </form>
+              </div>
+  
+              <div *ngIf="newIntervention.value.operation =='Stock' ">
+                  <form [formGroup]="stockForm" (ngSubmit)="addNewIntervention()">
+                      <div class="row form">
+  
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Date d'ajout</label>
+                                      <input type="date" class="form-control" formControlName="date">
+                                  </div>
+                              </div>
+                          </div>
+  
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Nom de fournisseur</label>
+                                      <input type="text" class="form-control" formControlName="nom_de_fournisseur">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Num de fournisseur</label>
+                                      <input type="text" class="form-control" formControlName="num_de_fournisseur">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Nom de l'article </label>
+                                      <input type="text" class="form-control" formControlName="product_name">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Dose normale </label>
+                                      <input type="text" class="form-control" formControlName="dose_normal">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class=" col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label for="">Prix </label>
+                                      <input type="text" class="form-control" formControlName="prix">
+                                  </div>
+                              </div>
+                          </div>
+  
+  
+  
+                          <div class=" col-sm-12">
+                              <button type="submit" class="btn btn-secondary  btn-block"
+                                  style="margin-bottom: 2rem!important;" [disabled]="! stockForm.valid ">Ajouter</button>
+                          </div>
+                      </div>
+  
+                  </form>
+              </div>
+  
+  
+  
+  
+  
+  
+              <div *ngIf="project != null">
+                  <div class="list-group" *ngIf="project.interventions != null">
+                      <a class="list-group-item list-group-item-action " *ngFor="let e of project.interventions">
+                          <!--
+   
+   
+                              -->
+  
+                          <div class="d-flex w-100 justify-content-between">
+                              <h5 class="mb-1">
+                                  <strong>{{e.name}}</strong>
+                              </h5>
+  
+  
+                          </div>
+  
+                          <section *ngIf="e.name=='Irragation' ">
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th>Attribue</th>
+                                          <th>Valeur</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td>Apport en eau </td>
+                                          <td>{{e.data.apport_en_eau}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Type </td>
+                                          <td>{{e.data.type}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Pompage </td>
+                                          <td>{{e.data.pompage}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Capacité </td>
+                                          <td>{{e.data.capacity}} </td>
+                                      </tr>
+  
+                                  </tbody>
+                              </table>
+                          </section>
+  
+  
+                          <section *ngIf="e.name=='Maintenance' ">
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th>Attribue</th>
+                                          <th>Valeur</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td>Nom de traitement chimique </td>
+                                          <td>{{e.data.nom_traitement_chimique}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Dose obligatoire </td>
+                                          <td>{{e.data.dose_obligatoire}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Climat </td>
+                                          <td>{{e.data.climat}} </td>
+                                      </tr>
+  
+                                  </tbody>
+                              </table>
+                          </section>
+  
+  
+                          <section *ngIf="e.name=='Récolte' ">
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th>Attribue</th>
+                                          <th>Valeur</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td> Pic de puissance </td>
+                                          <td>{{e.data.pic_de_puissance}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td> Agreage de fruits </td>
+                                          <td>{{e.data.agreage_de_fruits}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Nombre de caisse </td>
+                                          <td>{{e.data.nombre_de_caisse}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Poids </td>
+                                          <td>{{e.data.poids}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Numero de véhicule </td>
+                                          <td>{{e.data.numero_de_vehicule}} </td>
+                                      </tr>
+  
+  
+                                  </tbody>
+                              </table>
+                          </section>
+  
+  
+                          <section *ngIf="e.name=='Stock' ">
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th>Attribue</th>
+                                          <th>Valeur</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td> Nom de fournisseur </td>
+                                          <td>{{e.data.nom_de_fournisseur}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td> Num de fournisseur </td>
+                                          <td>{{e.data.num_de_fournisseur}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td> Dose normal </td>
+                                          <td>{{e.data.dose_normal}} </td>
+                                      </tr>
+                                      <tr>
+                                          <td>Prix </td>
+                                          <td>{{e.data.prix}} </td>
+                                      </tr>
+  
+  
+                                  </tbody>
+                              </table>
+                          </section>
+  
+  
+  
+                          <small>{{e.data.date|date}}</small>
+  
+  
+  
+                      </a>
+  
+                  </div>
+              </div>
+  
+  
+  
+  
+          </div>
+      </div>
+  
+  
+  
+
+</ion-content>

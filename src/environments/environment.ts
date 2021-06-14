@@ -3,7 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: "AIzaSyAUU3KbFsiztdKMzzNWDE3OWsHQFdptG1g",
+    authDomain: "smart-agriculture-4eecd.firebaseapp.com",
+    projectId: "smart-agriculture-4eecd",
+    storageBucket: "smart-agriculture-4eecd.appspot.com",
+    messagingSenderId: "958528188064",
+    appId: "1:958528188064:web:3f4f915d29e59a319263c5",
+    measurementId: "G-7YE4SNG7WR"
+  }
+
 };
 
 /*
